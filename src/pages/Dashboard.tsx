@@ -52,6 +52,23 @@ const Dashboard = () => {
     }
 
   };
+
+  const handelDelete = async (id: string) =>{
+    const postData = await axios.post(`${VITE_HOST_URL}/api/v1/password/delete`, {
+      id
+    }, {
+      headers: {
+        'Authorization': token.token
+      }
+    })
+    if(postData.data.sucess){
+      toast.success(postData.data.message)
+      getAllPasswords();
+    }else{
+      toast.error(postData.data.message)
+    }
+  }
+
   return (
     <section className="relative">
       <h1 className="text-3xl font-bold text-gray-700 my-10">
@@ -83,6 +100,9 @@ const Dashboard = () => {
               <th scope="col" className="px-6 py-3">
                 Password
               </th>
+              <th scope="col" className="px-6 py-3">
+                Delete
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -109,6 +129,7 @@ const Dashboard = () => {
                   <td className="px-6 py-4">{password.username}</td>
                   <td className="px-6 py-4">{password.websitelink}</td>
                   <td className="px-6 py-4">{password.password}</td>
+                  <td className="px-6 py-4"><button onClick={() => handelDelete(password._id)}>Delete</button></td>
                 </tr>
               );
             })}
